@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Finalizar Pedido</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; display: flex; justify-content: center; padding: 20px; }
+        .container { background: #1e1e1e; padding: 20px; border-radius: 10px; width: 100%; max-width: 400px; }
+        .item-resumo { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 10px 0; }
+        .total { font-size: 24px; color: #E8BC0E; margin: 20px 0; display: flex; justify-content: space-between; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; background: #2d2d2d; border: 1px solid #444; color: white; border-radius: 5px; }
+        button { width: 100%; padding: 15px; background: #E8BC0E; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; color: #000; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Resumo do Pedido</h2>
+    <div id="lista-itens"></div>
+    <div class="total">
+        <span>Total:</span>
+        <span id="preco-total">R$ 0,00</span>
+    </div>
+    <input type="text" id="c-nome" placeholder="Seu Nome completo">
+    <input type="text" id="c-rua" placeholder="Endereço de entrega">
+    <button onclick="gerarPedido()">FINALIZAR NO WHATSAPP</button>
+</div>
+
+<script>
+    // IMPORTANTE: Os IDs aqui devem ser strings "1", "2", etc.
+    const db = {
+        "1": { nome: "Kaiak Pulso", preco: 200 },
+        "2": { nome: "Kaiak Urbe", preco: 100 },
+        "3": { nome: "Essencial oud", preco: 250 }
+    };
+
+    function atualizarTela() {
+        const listaDiv = document.getElementById('lista-itens');
+        const totalDiv = document.getElementById('preco-total');
+        
+        // Recupera o carrinho
+        const storage = localStorage.getItem('cart');
+        const cart = storage ? JSON.parse(storage) : [];
+        
+        console.log("Carrinho lido na compra:", cart); // Verifique isso no F12 do Firefox
+
+        listaDiv.innerHTML = "";
+        let soma = 0;
+
+        if (cart.length === 0) {
+            listaDiv.innerHTML = "<p>O carrinho está vazio!</p>";
+            return;
+        }
+
+        cart.forEach(item => {
+            // Convertemos o ID para string para garantir que o db encontre
+            const produto = db[String(item.product_id)];
+
+            if (produto) {
+                const subtotal = produto.preco * item.quantity;
+                soma += subtotal;
+                listaDiv.innerHTML += `
+                    <div class="item-resumo">
+                        <span>${item.quantity}x ${produto.nome}</span>
+                        <span>R$ ${subtotal.toFixed(2)}</span>
+                    </div>`;
+            }
+        });
+        
+        totalDiv.innerText = "R$ " + soma.toFixed(2);
+    }
+
+    function gerarPedido() {
+        const storage = localStorage.getItem('cart');
+        const cart = storage ? JSON.parse(storage) : [];
+        const nome = document.getElementById('c-nome').value;
+        const rua = document.getElementById('c-rua').value;
+
+        if (!nome || !rua) {
+            alert("Preencha seu nome e endereço!");
+            return;
+        }
+
+        let mensagem = `*NOVO PEDIDO*\n\n`;
+        mensagem += `*Nome:* ${nome}\n`;
+        mensagem += `*Endereço:* ${rua}\n\n`;
+        mensagem += `*PRODUTOS:*\n`;
+
+        let totalGeral = 0;
+        cart.forEach(item => {
+            const p = db[String(item.product_id)];
+            if (p) {
+                const sub = p.preco * item.quantity;
+                totalGeral += sub;
+                mensagem += `- ${item.quantity}x ${p.nome} (R$ ${sub.toFixed(2)})\n`;
+            }
+        });
+
+        mensagem += `\n*TOTAL: R$ ${totalGeral.toFixed(2)}*`;
+
+        // Substitua pelo seu número (apenas números)
+        const fone = "5513996250158"; 
+        window.open(`https://wa.me/${fone}?text=${encodeURIComponent(mensagem)}`);
+    }
+
+    // Isso garante que o código rode assim que a página abrir
+    window.onload = atualizarTela;
+</script>
+</body>
+</html>
