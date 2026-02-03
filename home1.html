@@ -1,4 +1,11 @@
-* {
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página inicial - Loja virtual</title>
+    <style>
+        * {
     margin: 0;
     padding: 0;
 }
@@ -152,6 +159,7 @@ footer {
     width: 100%;
     color: white;
     align-items: center;
+    text-align: center;
 }
 
 p {
@@ -168,3 +176,40 @@ p a {
 }
 
     
+    </style>
+</head>
+<body>
+    <header class="header">
+
+            <nav class="nav">
+                 <a href="home1.html"><img src="imagens/logo2.png" width="70px"
+        height="70px"
+        class="logo"></a>  
+        <button class="hamburguer"></button>
+        <ul class="nav-list">
+            <li><a href="index.html" class="navbar">Produtos</a></li>
+            <li><a href="" class="navbar">Contato</a></li>
+            <li><a href="https://wa.me/message/4DBTGSHFC35ND1" class="navbar">Contato do DEV</a></li>
+        </ul>
+    </nav>
+    </header>
+<main>    
+    <section class="apresentacao">
+        <p>Bem-vindo à Kylinda Perfumaria!</p>
+        Sua loja virtual de perfumes e cosméticos.
+        <h4>*está é apenas uma página de apresentação da Loja*</h4>
+    </section>
+</main>
+    <footer>
+        <p>&copy; 2026 Loja Virtual Kylinda Perfumaria.<br> Todos os direitos reservados.</p>
+    </footer>
+        <script>
+                const hamburguer = document.querySelector(".hamburguer");
+                const nav = document.querySelector(".nav");
+
+                hamburguer.addEventListener("click", () => 
+                nav.classList.toggle("active"));
+
+        </script>
+    </body>
+</html>
