@@ -8,8 +8,10 @@
         .container { background: #1e1e1e; padding: 20px; border-radius: 10px; width: 100%; max-width: 400px; }
         .item-resumo { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 10px 0; }
         .total { font-size: 24px; color: #E8BC0E; margin: 20px 0; display: flex; justify-content: space-between; }
-        input { width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; background: #2d2d2d; border: 1px solid #444; color: white; border-radius: 5px; }
-        button { width: 100%; padding: 15px; background: #E8BC0E; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; color: #000; }
+        input, select { width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; background: #2d2d2d; border: 1px solid #444; color: white; border-radius: 5px; }
+        select { cursor: pointer; }
+        button { width: 100%; padding: 15px; background: #E8BC0E; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; color: #000; margin-top: 10px; }
+        button:hover { background: #d4ac0d; }
     </style>
 </head>
 <body>
@@ -21,29 +23,47 @@
         <span>Total:</span>
         <span id="preco-total">R$ 0,00</span>
     </div>
+
     <input type="text" id="c-nome" placeholder="Seu Nome completo">
-    <input type="text" id="c-rua" placeholder="Endereço de entrega">
+    <input type="text" id="c-rua" placeholder="Endereço (Rua e Número)">
+    <input type="text" id="c-cidade" placeholder="Cidade">
+    <input type="text" id="c-estado" placeholder="Estado (ex: SP)">
+    
+    <label for="c-pagamento" style="font-size: 14px; color: #aaa;">Método de Pagamento:</label>
+    <select id="c-pagamento">
+        <option value="Pix">Pix</option>
+        <option value="Cartão de Crédito">Cartão de Crédito</option>
+        <option value="Cartão de Débito">Cartão de Débito</option>
+    </select>
+
     <button onclick="gerarPedido()">FINALIZAR NO WHATSAPP</button>
 </div>
 
 <script>
-    // IMPORTANTE: Os IDs aqui devem ser strings "1", "2", etc.
     const db = {
-        "1": { nome: "Kaiak Pulso", preco: 200 },
-        "2": { nome: "Kaiak Urbe", preco: 100 },
-        "3": { nome: "Essencial oud", preco: 250 }
+        "1": { nome: "Uomini Tradicional", preco: 200 },
+        "2": { nome: "Uomini Black", preco: 200 },
+        "3": { nome: "Uomini Infite", preco: 200 },
+        "4": { nome: "Egeo Vanilla Vibe", preco: 160},
+        "5": { nome: "Egeo Dolce", preco: 160},
+        "6": { nome: "Dream Vigem Encantada", preco: 110},
+        "7": { nome: "Floratta Gold", preco: 165},
+        "8": { nome: "Floratta Blue", preco: 165},
+        "9": { nome: "Floratta Flores Secretas", preco: 165},
+        "10": { nome: "Floratta Red", preco: 165},
+        "11": { nome: "Floratta Rose", preco: 165},
+        "12": { nome: "Lily Sérum", preco:73 },
+        "13": { nome: "Lily Creme (Recipiente)", preco:145 },
+        "14": { nome: "Lily creme (Refil)", preco:100 }
+        //"": { nome: "", preco: },
     };
 
     function atualizarTela() {
         const listaDiv = document.getElementById('lista-itens');
         const totalDiv = document.getElementById('preco-total');
-        
-        // Recupera o carrinho
         const storage = localStorage.getItem('cart');
         const cart = storage ? JSON.parse(storage) : [];
         
-        console.log("Carrinho lido na compra:", cart); // Verifique isso no F12 do Firefox
-
         listaDiv.innerHTML = "";
         let soma = 0;
 
@@ -53,9 +73,7 @@
         }
 
         cart.forEach(item => {
-            // Convertemos o ID para string para garantir que o db encontre
             const produto = db[String(item.product_id)];
-
             if (produto) {
                 const subtotal = produto.preco * item.quantity;
                 soma += subtotal;
@@ -73,17 +91,24 @@
     function gerarPedido() {
         const storage = localStorage.getItem('cart');
         const cart = storage ? JSON.parse(storage) : [];
+        
+        // Captura dos novos valores
         const nome = document.getElementById('c-nome').value;
+        const estado = document.getElementById('c-estado').value;
         const rua = document.getElementById('c-rua').value;
+        const cidade = document.getElementById('c-cidade').value;
+        const pagamento = document.getElementById('c-pagamento').value;
 
-        if (!nome || !rua) {
-            alert("Preencha seu nome e endereço!");
+        if (!nome || !rua || !cidade || !estado) {
+            alert("Por favor, preencha todos os campos de entrega!");
             return;
         }
 
         let mensagem = `*NOVO PEDIDO*\n\n`;
-        mensagem += `*Nome:* ${nome}\n`;
-        mensagem += `*Endereço:* ${rua}\n\n`;
+        mensagem += `*Cliente:* ${nome}\n`;
+        mensagem += `*Cidade/UF:* ${cidade} - ${estado}\n`;
+        mensagem += `*Endereço:* ${rua}\n`;
+        mensagem += `*Pagamento:* ${pagamento}\n\n`;
         mensagem += `*PRODUTOS:*\n`;
 
         let totalGeral = 0;
@@ -98,12 +123,10 @@
 
         mensagem += `\n*TOTAL: R$ ${totalGeral.toFixed(2)}*`;
 
-        // Substitua pelo seu número (apenas números)
         const fone = "5513996250158"; 
         window.open(`https://wa.me/${fone}?text=${encodeURIComponent(mensagem)}`);
     }
 
-    // Isso garante que o código rode assim que a página abrir
     window.onload = atualizarTela;
 </script>
 </body>
