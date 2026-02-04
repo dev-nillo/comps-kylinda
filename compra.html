@@ -2,16 +2,70 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalizar Pedido</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; display: flex; justify-content: center; padding: 20px; }
-        .container { background: #1e1e1e; padding: 20px; border-radius: 10px; width: 100%; max-width: 400px; }
-        .item-resumo { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 10px 0; }
-        .total { font-size: 24px; color: #E8BC0E; margin: 20px 0; display: flex; justify-content: space-between; }
-        input, select { width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; background: #2d2d2d; border: 1px solid #444; color: white; border-radius: 5px; }
-        select { cursor: pointer; }
-        button { width: 100%; padding: 15px; background: #E8BC0E; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; color: #000; margin-top: 10px; }
-        button:hover { background: #d4ac0d; }
+    body {
+    font-family: sans-serif; 
+    background: #121212; 
+    color: white; 
+    display: flex; 
+    justify-content: center; 
+    padding: 10px; /* Reduzi o padding para sobrar mais espaço no mobile */
+    }
+    .container {
+        background: #1e1e1e; 
+        padding: 25px; 
+        border-radius: 15px; 
+        width: 100%; 
+        /* No mobile ele ocupa 95% da tela, no PC trava em 500px */
+        max-width: 500px; 
+        box-sizing: border-box; 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .item-resumo {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #333;
+        padding: 10px 0;
+    }
+    .total {
+        font-size: 24px;
+        color: #E8BC0E;
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-between;
+    }
+        input, select {
+            width: 100%; 
+            padding: 15px; /* Aumentado de 10px para 15px */
+            margin-bottom: 15px; 
+            box-sizing: border-box; 
+            background: #2d2d2d; 
+            border: 1px solid #444; 
+            color: white; 
+            border-radius: 8px; 
+            font-size: 16px; /* Evita que o iPhone dê zoom automático ao clicar */
+        }
+        select {
+            cursor: pointer;
+        }
+        button {
+            width: 100%; 
+            padding: 18px; 
+            background: #E8BC0E; 
+            border: none; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            color: #000; 
+            font-size: 18px; /* Botão maior e mais visível */
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #d4ac0d;
+        }
     </style>
 </head>
 <body>
